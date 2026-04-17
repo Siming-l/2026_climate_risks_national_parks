@@ -1,29 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-            <title></title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Climate Risks to U.S. National Parks</title>
 
-        <!--put your external stylesheet links here-->
-        <link rel="stylesheet" href="css/style.css">
-        <!--[if IE<9]>
-            <link rel="stylesheet" href="css/style.ie.css">
-        <![endif]-->
+  <link rel="stylesheet" href="lib/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-text">
+      <h1>Climate Risks to U.S. National Parks</h1>
+      <p>
+        An interactive coordinated visualization of wildfire, drought, heat,
+        and flood risks across U.S. national parks.
+      </p>
+    </div>
+    <div class="header-meta">
+      <p><strong>GEOG 575 Final Project</strong></p>
+      <p>Your Name + Teammate Name</p>
+    </div>
+  </header>
 
-         <!--you can also place internal styles here;
-             place these within <style> tags-->
-        
-    </head>
+  <main class="layout">
+    <!-- LEFT CONTROL PANEL -->
+    <aside class="sidebar-left">
+      <section class="panel">
+        <h2>Controls</h2>
 
-    <body>
-        <!--put your initial page content here-->
+        <div class="control-group">
+          <label for="attributeSelect">Risk Variable</label>
+          <select id="attributeSelect"></select>
+        </div>
 
-        <!--you can also use this space for internal scripts;
-        place these within <script> tags-->
+        <div class="control-group">
+          <label for="yearSelect">Scenario Year</label>
+          <select id="yearSelect">
+            <option value="2025">2025</option>
+            <option value="2050">2050</option>
+            <option value="2100">2100</option>
+          </select>
+        </div>
 
-        <!--put your external script links here-->
-        <script type="text/javascript" src="js/main.js"></script>
-        <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
-    </body>
+        <div class="control-group">
+          <label for="thresholdRange">
+            Minimum Risk Threshold:
+            <span id="thresholdLabel">0</span>
+          </label>
+          <input type="range" id="thresholdRange" min="0" max="100" step="5" value="0" />
+        </div>
+
+        <div class="control-group">
+          <label for="regionFilter">Region</label>
+          <select id="regionFilter">
+            <option value="all">All Regions</option>
+            <option value="West">West</option>
+            <option value="Mountain">Mountain</option>
+            <option value="South">South</option>
+            <option value="Midwest">Midwest</option>
+            <option value="East">East</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Pacific">Pacific</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="searchInput">Search Park</label>
+          <input type="text" id="searchInput" placeholder="Type a park name..." />
+        </div>
+
+        <div class="control-group button-group">
+          <button id="resetBtn">Reset Filters</button>
+          <button id="clearSelectionBtn">Clear Selection</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Dynamic Legend</h2>
+        <p id="legendTitle">Legend for Overall Risk</p>
+        <div id="legendGradient"></div>
+        <div class="legend-labels">
+          <span>Low</span>
+          <span>High</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Metadata</h2>
+        <p id="metadataText">
+          This visualization compares normalized climate-related risks across U.S. national parks.
+        </p>
+      </section>
+    </aside>
+
+    <!-- CENTER -->
+    <section class="main-center">
+      <section class="panel map-panel">
+        <div class="panel-heading">
+          <h2>Map View</h2>
+          <p id="mapSummary">Loading data...</p>
+        </div>
+        <div id="map"></div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <h2>Comparison Chart</h2>
+          <p>Bars are linked to the map and table.</p>
+        </div>
+        <svg id="chartSvg"></svg>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-heading">
+          <h2>Ranking Table</h2>
+          <p>Click a row to highlight the same park everywhere.</p>
+        </div>
+        <div class="table-wrapper">
+          <table id="rankingTable">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Park</th>
+                <th>State</th>
+                <th>Region</th>
+                <th id="tableAttributeHeader">Overall Risk</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- RIGHT DETAIL PANEL -->
+    <aside class="sidebar-right">
+      <section class="panel">
+        <h2>Park Detail</h2>
+        <div id="detailPanel">
+          <p class="placeholder-text">
+            Click a park on the map, chart, or table to view detailed information.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Selected Parks</h2>
+        <div id="selectedPanel">
+          <p class="placeholder-text">No parks selected yet.</p>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="lib/d3.min.js"></script>
+  <script src="lib/topojson.min.js"></script>
+  <script src="lib/leaflet.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>

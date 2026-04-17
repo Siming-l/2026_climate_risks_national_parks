@@ -1,1 +1,228 @@
-/*insert style here*/
+/*Style by Siming and Yilun*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6fa;
+  color: #1f2937;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  background: white;
+  border-bottom: 1px solid #d9e0e7;
+}
+
+.site-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 30px;
+}
+
+.site-header p {
+  margin: 0;
+  color: #5f6b7a;
+  line-height: 1.5;
+}
+
+.header-meta {
+  min-width: 220px;
+  text-align: right;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  gap: 16px;
+  padding: 16px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid #d9e0e7;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(20, 35, 60, 0.06);
+  margin-bottom: 16px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.panel-heading p,
+.panel p,
+.placeholder-text {
+  color: #5f6b7a;
+  line-height: 1.5;
+}
+
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.control-group input,
+.control-group select,
+.control-group button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfd8e3;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.button-group button {
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.button-group button:hover {
+  background: #ebf2ff;
+}
+
+#map {
+  width: 100%;
+  height: 540px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#chartSvg {
+  width: 100%;
+  height: 340px;
+  display: block;
+}
+
+#legendGradient {
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid #cfd8e3;
+  margin-top: 10px;
+}
+
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #5f6b7a;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead tr {
+  background: #f7fafc;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5ebf2;
+  font-size: 14px;
+}
+
+tbody tr:hover {
+  background: #eef5ff;
+  cursor: pointer;
+}
+
+tbody tr.active-row {
+  background: #dbeafe;
+}
+
+.detail-card,
+.selected-card {
+  border: 1px solid #d9e0e7;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fafcff;
+  margin-bottom: 10px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.metric-box {
+  padding: 10px;
+  border: 1px solid #d9e0e7;
+  border-radius: 10px;
+  background: white;
+}
+
+.metric-box span {
+  display: block;
+  color: #5f6b7a;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.metric-box strong {
+  font-size: 22px;
+}
+
+.leaflet-popup-content {
+  line-height: 1.45;
+}
+
+@media (max-width: 1200px) {
+  .layout {
+    grid-template-columns: 280px 1fr;
+  }
+
+  .sidebar-right {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .site-header {
+    flex-direction: column;
+  }
+
+  .header-meta {
+    text-align: left;
+  }
+}
