@@ -1,29 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-            <title></title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Climate Risks Across U.S. National Parks</title>
 
-        <!--put your external stylesheet links here-->
-        <link rel="stylesheet" href="css/style.css">
-        <!--[if IE<9]>
-            <link rel="stylesheet" href="css/style.ie.css">
-        <![endif]-->
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
-         <!--you can also place internal styles here;
-             place these within <style> tags-->
-        
-    </head>
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-    <body>
-        <!--put your initial page content here-->
+<body>
 
-        <!--you can also use this space for internal scripts;
-        place these within <script> tags-->
+    <div class="app-container">
 
-        <!--put your external script links here-->
-        <script type="text/javascript" src="js/main.js"></script>
-        <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
-    </body>
+        <!-- LEFT CONTROL PANEL -->
+        <aside class="sidebar">
+            <div class="title-block">
+                <h1>Climate Risk Explorer</h1>
+                <p>U.S. National Parks</p>
+            </div>
+
+            <div class="panel-section">
+                <label>Search Park</label>
+                <input id="searchBox" type="text" placeholder="Search Yellowstone, Yosemite...">
+            </div>
+
+            <div class="panel-section">
+                <label>Map Layer</label>
+                <select id="layerSelect">
+                    <option value="basic">Basic Park Points</option>
+                </select>
+            </div>
+
+            <div class="panel-section">
+                <label>Legend</label>
+                <div class="legend-item">
+                    <span class="legend-dot"></span>
+                    National Park
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label>Selected Park</label>
+                <div id="detailPanel" class="detail-panel">
+                    Click a park marker to view details.
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAP AREA -->
+        <main class="map-area">
+            <div class="top-bar">
+                <strong>Interactive National Park Map</strong>
+                <span>Leaflet + National Park Service API</span>
+            </div>
+
+            <div id="map"></div>
+        </main>
+
+    </div>
+
+    <!-- Libraries -->
+    <script src="lib/jquery-3.5.1.js"></script>
+    <script src="lib/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+
+</body>
 </html>
