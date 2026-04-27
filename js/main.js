@@ -1,7 +1,10 @@
-/* =========================================================
-   GEOG 575 Final Project
-   Climate Risks to U.S. National Parks
-========================================================= */
+//insert code here!
+// ===============================
+// 1. API KEY
+// Do NOT push your real key to GitHub.
+// Replace this locally only.
+// ===============================
+const apiKey = "bWAAEqyZ3eUDlvKietZDTGgX0NAg9fBoeUPItvkV";
 
 
 const apiKey = "bWAAEqyZ3eUDlvKietZDTGgX0NAg9fBoeUPItvkV";
