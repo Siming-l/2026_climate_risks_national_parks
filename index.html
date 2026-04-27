@@ -1,162 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Climate Risks to U.S. National Parks</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Climate Risks Across U.S. National Parks</title>
 
-  <link rel="stylesheet" href="lib/leaflet.css" />
-  <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="header-text">
-      <h1>Climate Risks to U.S. National Parks</h1>
-      <p>
-        An interactive coordinated visualization of wildfire, drought, heat,
-        and flood risks across U.S. national parks.
-      </p>
+
+    <!-- INTRO MODAL -->
+    <div id="introModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('introModal')">×</button>
+
+            <h2>Climate Risks Across U.S. National Parks</h2>
+
+            <p>
+                This coordinated geovisualization combines National Park Service information
+                with monthly NOAA climate indicators from 1985 to 2026.
+            </p>
+
+            <p>
+                Use the map to explore climate risk patterns, compare parks through the
+                ranked bar chart, and inspect individual parks with NPS descriptions and images.
+            </p>
+
+            <h3>How to use</h3>
+            <ol>
+                <li>Select a climate risk indicator.</li>
+                <li>Move the year slider.</li>
+                <li>Filter parks by minimum risk.</li>
+                <li>Click a park or ranking bar to inspect details.</li>
+                <li>Use quick zoom buttons for Mainland U.S., Alaska, Hawaii, and Virgin Islands.</li>
+            </ol>
+
+            <button class="start-btn" onclick="closeModal('introModal')">
+                Start Exploring
+            </button>
+        </div>
     </div>
-    <div class="header-meta">
-      <p><strong>GEOG 575 Final Project</strong></p>
-      <p>Your Name + Teammate Name</p>
+
+    <div class="app-container">
+
+        <!-- LEFT SIDEBAR: ONLY FOR EXPLORER PAGE -->
+        <aside class="sidebar">
+
+            <div class="title-block">
+                <h1>Climate Risk Explorer</h1>
+                <p>U.S. National Parks · 1985–2026</p>
+            </div>
+
+            <div class="panel-section">
+                <label>Search Park</label>
+                <input id="searchBox" type="text" placeholder="Search Yellowstone, Yosemite...">
+            </div>
+
+            <div class="panel-section">
+                <label>Climate Risk Indicator</label>
+                <select id="hazardSelect">
+                    <option value="overall">Overall Climate Risk</option>
+                    <option value="heat">Heat Stress Risk</option>
+                    <option value="drought">Drought Stress Risk</option>
+                    <option value="precipRisk">Heavy Precipitation Risk</option>
+                    <option value="temp">Mean Temperature</option>
+                    <option value="tmax">Maximum Temperature</option>
+                    <option value="tmin">Minimum Temperature</option>
+                    <option value="precip">Annual Precipitation</option>
+                    <option value="pdsi">Drought Index</option>
+                </select>
+            </div>
+
+            <div class="panel-section">
+                <label>Year: <span id="yearLabel">1985</span></label>
+                <input id="yearSlider" type="range" min="1985" max="2026" step="1" value="1985">
+                <div class="slider-labels">
+                    <span>1985</span>
+                    <span>2026</span>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label>Minimum Risk: <span id="riskLabel">0</span></label>
+                <input id="riskFilter" type="range" min="0" max="100" step="5" value="0">
+            </div>
+
+            <div class="panel-section">
+                <label>Quick Zoom</label>
+                <div class="zoom-buttons">
+                    <button onclick="zoomToRegion('all')">All Parks</button>
+                    <button onclick="zoomToRegion('mainland')">Mainland U.S.</button>
+                    <button onclick="zoomToRegion('alaska')">Alaska</button>
+                    <button onclick="zoomToRegion('hawaii')">Hawaii</button>
+                    <button onclick="zoomToRegion('virgin')">Virgin Islands</button>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label>Dynamic Legend</label>
+                <div id="legendTitle" class="legend-title">Overall Climate Risk</div>
+                <div id="legendGradient" class="legend-gradient"></div>
+                <div class="legend-labels">
+                    <span>Low risk: 0</span>
+                    <span>High risk: 100</span>
+                </div>
+                <div class="legend-note">
+                    <span class="no-data-swatch"></span>
+                    Gray points indicate parks without usable climate values for the selected year.
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label>Selected Park</label>
+                <div id="selectedParkPanel">
+                    Click a park or ranking bar to inspect details.
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main-area">
+
+            <!-- TOP NAV -->
+            <nav class="top-nav">
+                <div class="nav-title">
+                    <strong>Climate Risks Across U.S. National Parks</strong>
+                    <span>NPS API + NOAA Monthly Climate Indicators</span>
+                </div>
+
+                <div class="nav-links">
+                    <button onclick="showPage('homePage')">Explorer</button>
+                    <button onclick="showPage('storyAboutPage')">Story + About</button>
+                    <button onclick="showPage('conclusionPage')">Conclusion</button>
+                    <button onclick="showPage('dataPage')">Data</button>
+                </div>
+            </nav>
+
+            <!-- EXPLORER PAGE -->
+            <section id="homePage" class="page active-page">
+
+                <div id="map"></div>
+
+                <div id="floatingDetail" class="floating-detail hidden">
+                    <button class="detail-close" onclick="closeFloatingDetail()">×</button>
+                    <div id="floatingDetailContent">
+                        Click a park to view details.
+                    </div>
+                </div>
+
+                <section class="chart-panel">
+                    <div class="chart-header">
+                        <div>
+                            <h3>Risk Ranking Across National Parks</h3>
+                            <p>
+                                Bars rank parks with available climate data for the selected indicator and year.
+                                Click a bar to locate that park on the map.
+                            </p>
+                        </div>
+                        <span id="chartSubhead">Top ranked parks</span>
+                    </div>
+
+                    <svg id="rankingChart"></svg>
+                </section>
+
+            </section>
+
+            <!-- STORY + ABOUT PAGE -->
+            <section id="storyAboutPage" class="page text-page">
+                <div class="hero-section">
+                    <h1>Story + About</h1>
+                    <p>
+                        National parks protect iconic landscapes, ecosystems, and cultural resources,
+                        but these places are increasingly exposed to climate stress.
+                    </p>
+                </div>
+
+                <div class="text-content wide-content">
+                    <h2>Project Story</h2>
+                    <p>
+                        U.S. national parks are often imagined as protected spaces, yet protection from
+                        development does not mean protection from climate change. Temperature extremes,
+                        drought, and precipitation variability can affect vegetation, wildfire conditions,
+                        water resources, visitor safety, and long-term conservation planning.
+                    </p>
+
+                    <p>
+                        This project combines a story-driven interface with an exploratory mapping tool.
+                        The map supports free exploration, while the ranking chart helps users compare
+                        parks systematically across risk indicators and years.
+                    </p>
+
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Target User</h3>
+                            <p>
+                                The intended user is an environmental planner or climate adaptation
+                                practitioner who needs to identify high-risk parks, compare regional
+                                patterns, and communicate climate-related vulnerability to public audiences.
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Use Scenario</h3>
+                            <p>
+                                A planner opens the explorer, selects a risk indicator, moves through
+                                historical years, filters parks by risk threshold, and compares the top-ranked
+                                parks through linked map and chart views.
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Interaction Design</h3>
+                            <p>
+                                The interface supports search, pan and zoom, reexpression by indicator,
+                                temporal exploration, risk filtering, linked highlighting, and park-level
+                                detail retrieval.
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>Design Strategy</h3>
+                            <p>
+                                The map emphasizes spatial pattern recognition, while the ranked bar chart
+                                emphasizes ordered comparison. Fixed-size points avoid confusing symbol
+                                size with risk magnitude.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONCLUSION PAGE -->
+            <section id="conclusionPage" class="page text-page">
+                <div class="hero-section">
+                    <h1>Conclusion</h1>
+                    <p>
+                        Climate risk across national parks is regionally uneven and hazard-specific.
+                    </p>
+                </div>
+
+                <div class="text-content wide-content">
+                    <h2>Emerging Spatial Patterns</h2>
+
+                    <div class="conclusion-grid">
+                        <div class="conclusion-card">
+                            <h3>Western parks often show stronger heat and drought stress</h3>
+                            <p>
+                                Parks in the Southwest and interior West tend to rank higher for heat and
+                                drought-related indicators. This pattern likely reflects arid climate regimes,
+                                high summer temperatures, and limited water availability.
+                            </p>
+                        </div>
+
+                        <div class="conclusion-card">
+                            <h3>Island parks require separate interpretation</h3>
+                            <p>
+                                Hawaii and Virgin Islands parks are geographically small and distant from the
+                                mainland, but they should not be visually minimized. Their climate exposure
+                                can involve heat, precipitation extremes, and coastal vulnerability.
+                            </p>
+                        </div>
+
+                        <div class="conclusion-card">
+                            <h3>Alaska parks show distinct climate signals</h3>
+                            <p>
+                                Alaska parks may not always rank highest under drought indicators, but they
+                                are important for interpreting temperature change in high-latitude protected
+                                landscapes.
+                            </p>
+                        </div>
+
+                        <div class="conclusion-card">
+                            <h3>Risk is not one-dimensional</h3>
+                            <p>
+                                A park with high heat risk may not have high precipitation risk. This is why
+                                the dropdown separates overall risk, heat stress, drought stress, and heavy
+                                precipitation instead of using only one general climate score.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h2>Interpretive Takeaway</h2>
+                    <p>
+                        The goal of the application is not to claim a single “most threatened” park. Instead,
+                        it helps users identify which parks stand out under different climate stressors and
+                        supports region-specific adaptation thinking.
+                    </p>
+                </div>
+            </section>
+
+            <!-- DATA PAGE -->
+            <section id="dataPage" class="page text-page">
+                <div class="hero-section">
+                    <h1>Data + Methods</h1>
+                    <p>
+                        The application joins National Park Service park information with monthly climate
+                        indicators using parkCode.
+                    </p>
+                </div>
+
+                <div class="text-content wide-content">
+                    <h2>Data Sources</h2>
+                    <ul>
+                        <li><b>National Park Service API:</b> park names, coordinates, descriptions, states, designations, images, and official URLs.</li>
+                        <li><b>NOAA monthly climate data:</b> park-level monthly temperature, maximum temperature, minimum temperature, precipitation, and drought index from 1985 to 2026.</li>
+                    </ul>
+
+                    <h2>Join Method</h2>
+                    <p>
+                        Park attributes from the NPS API are joined to the climate table using
+                        <b>parkCode</b>. Monthly records are aggregated to annual park-level values.
+                    </p>
+
+                    <h2>Risk Calculation</h2>
+                    <p>
+                        Heat stress risk is derived from maximum temperature, drought stress risk is derived
+                        from the drought index, and heavy precipitation risk is derived from annual
+                        precipitation. These values are normalized to a 0–100 relative scale for comparison.
+                        The overall climate risk score combines heat, drought, and precipitation indicators.
+                    </p>
+
+                    <h2>Cartographers</h2>
+                    <p>
+                        Created by <b>Siming Li</b> and <b>Yilun Zhao</b> for GEOG 575.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
     </div>
-  </header>
 
-  <main class="layout">
-    <!-- LEFT CONTROL PANEL -->
-    <aside class="sidebar-left">
-      <section class="panel">
-        <h2>Controls</h2>
+    <script src="lib/jquery-3.5.1.js"></script>
+    <script src="lib/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="js/main.js"></script>
 
-        <div class="control-group">
-          <label for="attributeSelect">Risk Variable</label>
-          <select id="attributeSelect"></select>
-        </div>
-
-        <div class="control-group">
-          <label for="yearSelect">Scenario Year</label>
-          <select id="yearSelect">
-            <option value="2025">2025</option>
-            <option value="2050">2050</option>
-            <option value="2100">2100</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="thresholdRange">
-            Minimum Risk Threshold:
-            <span id="thresholdLabel">0</span>
-          </label>
-          <input type="range" id="thresholdRange" min="0" max="100" step="5" value="0" />
-        </div>
-
-        <div class="control-group">
-          <label for="regionFilter">Region</label>
-          <select id="regionFilter">
-            <option value="all">All Regions</option>
-            <option value="West">West</option>
-            <option value="Mountain">Mountain</option>
-            <option value="South">South</option>
-            <option value="Midwest">Midwest</option>
-            <option value="East">East</option>
-            <option value="Alaska">Alaska</option>
-            <option value="Pacific">Pacific</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label for="searchInput">Search Park</label>
-          <input type="text" id="searchInput" placeholder="Type a park name..." />
-        </div>
-
-        <div class="control-group button-group">
-          <button id="resetBtn">Reset Filters</button>
-          <button id="clearSelectionBtn">Clear Selection</button>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Dynamic Legend</h2>
-        <p id="legendTitle">Legend for Overall Risk</p>
-        <div id="legendGradient"></div>
-        <div class="legend-labels">
-          <span>Low</span>
-          <span>High</span>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Metadata</h2>
-        <p id="metadataText">
-          This visualization compares normalized climate-related risks across U.S. national parks.
-        </p>
-      </section>
-    </aside>
-
-    <!-- CENTER -->
-    <section class="main-center">
-      <section class="panel map-panel">
-        <div class="panel-heading">
-          <h2>Map View</h2>
-          <p id="mapSummary">Loading data...</p>
-        </div>
-        <div id="map"></div>
-      </section>
-
-      <section class="panel chart-panel">
-        <div class="panel-heading">
-          <h2>Comparison Chart</h2>
-          <p>Bars are linked to the map and table.</p>
-        </div>
-        <svg id="chartSvg"></svg>
-      </section>
-
-      <section class="panel table-panel">
-        <div class="panel-heading">
-          <h2>Ranking Table</h2>
-          <p>Click a row to highlight the same park everywhere.</p>
-        </div>
-        <div class="table-wrapper">
-          <table id="rankingTable">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Park</th>
-                <th>State</th>
-                <th>Region</th>
-                <th id="tableAttributeHeader">Overall Risk</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-    </section>
-
-    <!-- RIGHT DETAIL PANEL -->
-    <aside class="sidebar-right">
-      <section class="panel">
-        <h2>Park Detail</h2>
-        <div id="detailPanel">
-          <p class="placeholder-text">
-            Click a park on the map, chart, or table to view detailed information.
-          </p>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Selected Parks</h2>
-        <div id="selectedPanel">
-          <p class="placeholder-text">No parks selected yet.</p>
-        </div>
-      </section>
-    </aside>
-  </main>
-
-  <script src="lib/d3.min.js"></script>
-  <script src="lib/topojson.min.js"></script>
-  <script src="lib/leaflet.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>
