@@ -1,315 +1,345 @@
-/*Style by Siming and Yilun*/
+/* =========================================================
+   style.css — National Park Climate Explorer
+   ========================================================= */
+/* Main styling file: layout, map, panels, charts, responsive */
 
-/* ================= RESET ================= */
+/* ---------- Global reset + base styles ---------- */
 html, body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", sans-serif;
-    background: #06111f;
-    color: #e6edf3;
+  margin: 0;
+  height: 100%;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f3efe6;
+  color: #17212b;
 }
 
-/* ================= LAYOUT ================= */
+* { box-sizing: border-box; } /* keep sizing predictable */
+
+button, input, select { font-family: inherit; }
+
+/* ================= Layout ================= */
+/* Main app split: sidebar + map area */
 .app-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.main-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ================= SIDEBAR ================= */
+/* Left control panel */
 .sidebar {
-    width: 300px;
-    background: rgba(10, 25, 40, 0.96);
-    padding: 16px;
-    overflow-y: auto;
-    border-right: 1px solid rgba(255,255,255,0.06);
+  width: 320px;
+  padding: 16px;
+  overflow-y: auto;
+  background: #102235;
+  color: #edf6ff;
+  z-index: 20;
 }
 
+/* Right main content */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Title block */
 .title-block h1 {
-    margin: 0;
-    font-size: 20px;
+  margin: 0;
+  font-size: 22px;
 }
 
 .title-block p {
-    font-size: 12px;
-    opacity: 0.7;
+  font-size: 12px;
+  color: #aac4d8;
 }
 
-/* PANEL */
+/* Control panels inside sidebar */
 .panel-section {
-    margin-top: 16px;
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
+/* Labels (uppercase style) */
 .panel-section label {
-    font-size: 12px;
-    opacity: 0.75;
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #b8d8ec;
+  text-transform: uppercase;
 }
 
-.panel-section input,
-.panel-section select {
-    width: 100%;
-    margin-top: 6px;
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-    background: #0c1f33;
-    color: #ffffff;
+/* Inputs style */
+input, select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: #f7fbff;
+  color: #17212b;
 }
 
-/* ZOOM BUTTONS */
-.zoom-buttons button {
-    width: 100%;
-    margin-top: 6px;
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-    background: #17324a;
-    color: white;
-    cursor: pointer;
-}
-
-.zoom-buttons button:hover {
-    background: #204a6a;
-}
-
-/* ================= LEGEND ================= */
-.legend-gradient {
-    height: 10px;
-    margin-top: 6px;
-    border-radius: 4px;
-}
-
+/* Slider + legend labels */
+.slider-labels,
 .legend-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #b8d8ec;
+}
+
+/* Zoom buttons group */
+.zoom-buttons {
+  display: grid;
+  gap: 6px;
+}
+
+/* Button base style */
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  background: #2c6e91;
+  color: white;
+  font-weight: 700;
+}
+
+button:hover { background: #1f5775; }
+
+/* ================= Top Nav ================= */
+/* Header bar above map */
+.top-nav {
+  height: 60px;
+  padding: 10px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffaf0;
+  border-bottom: 1px solid #d6cdbf;
+  z-index: 500;
+}
+
+/* Title + subtitle */
+.nav-title strong { display: block; }
+.nav-title span { font-size: 12px; color: #586575; }
+
+/* Navigation buttons */
+.nav-links button { margin-left: 6px; background: #31572c; }
+
+/* ================= Pages ================= */
+/* Page switching (only one visible) */
+.page {
+  display: none;
+  flex: 1;
+}
+
+.active-page { display: block; }
+
+/* Main map page */
+#homePage {
+  position: relative;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  background: #fffaf0;
+}
+
+/* Map container */
+#map {
+  height: 72vh;
+  min-height: 520px;
+  background: #e8e1d2;
+}
+
+/* ================= Legend ================= */
+/* Color legend bar */
+.legend-gradient {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ffffcc, #fd8d3c, #800026);
+}
+
+.legend-title {
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .legend-note {
-    font-size: 10px;
-    opacity: 0.7;
-    margin-top: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #cfe6f5;
 }
 
-.no-data-swatch {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: gray;
-    border-radius: 50%;
-    margin-right: 4px;
+/* ================= Leaflet Controls ================= */
+/* Layer switcher styling */
+.leaflet-control-layers {
+  border-radius: 12px !important;
+  background: rgba(255,250,240,0.96) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+  border: 1px solid #d8ccb8 !important;
+  color: #17212b !important;
 }
 
-/* ================= NAV ================= */
-.top-nav {
-    background: rgba(10, 25, 40, 0.95);
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.leaflet-control-layers label {
+  font-size: 12px;
 }
 
-.nav-title span {
-    font-size: 12px;
-    opacity: 0.6;
-    margin-left: 6px;
-}
-
-.nav-links button {
-    margin-left: 8px;
-    padding: 6px 12px;
-    border-radius: 12px;
-    border: none;
-    background: #16314a;
-    color: white;
-    cursor: pointer;
-}
-
-.nav-links button:hover {
-    background: #24506e;
-}
-
-/* ================= PAGE ================= */
-.page {
-    display: none;
-    flex: 1;
-}
-
-.active-page {
-    display: block;
-}
-
-/* ================= EXPLORER ================= */
-#homePage {
-    height: 100vh;
-    overflow-y: auto;
-}
-
-/* MAP */
-#map {
-    height: 80vh;
-}
-
-/* ================= CHART ================= */
-.chart-panel {
-    padding: 24px;
-    background: rgba(6, 18, 30, 0.96);
-    min-height: 1200px;
-}
-
-.chart-header h3 {
-    margin: 0;
-}
-
-.chart-header p {
-    font-size: 13px;
-    opacity: 0.7;
-}
-
-#rankingChart {
-    width: 100%;
-    height: 1100px;
-}
-
-/* CHART TEXT */
-.chart-label {
-    fill: #e6edf3;
-    font-size: 12px;
-}
-
-.chart-value {
-    fill: #ffffff;
-    font-size: 11px;
-}
-
-/* ================= FLOATING PANEL ================= */
-.floating-detail {
-    position: absolute;
-    right: 20px;
-    top: 90px;
-    width: 300px;
-    background: rgba(10, 25, 40, 0.96);
-    padding: 12px;
-    border-radius: 10px;
-    z-index: 600;
-}
-
-/* ================= TEXT PAGES ================= */
-.text-page {
-    overflow-y: auto;
-    padding: 0;
-
-    background:
-        linear-gradient(rgba(6,17,31,0.75), rgba(6,17,31,0.95)),
-        radial-gradient(circle at 20% 20%, rgba(255,120,0,0.25), transparent 40%),
-        radial-gradient(circle at 80% 30%, rgba(0,170,255,0.2), transparent 40%),
-        radial-gradient(circle at 60% 90%, rgba(200,0,80,0.2), transparent 45%),
-        #06111f;
-}
-
-/* HERO */
-.hero-section {
-    padding: 80px 40px 40px;
-}
-
-.hero-section h1 {
-    font-size: 42px;
-}
-
-.hero-section p {
-    max-width: 600px;
-    opacity: 0.8;
-}
-
-/* CONTENT */
-.text-content {
-    padding: 20px 40px 80px;
-    max-width: 1100px;
-    margin: auto;
-}
-
-/* GRID */
-.info-grid,
-.conclusion-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.info-card,
-.conclusion-card {
-    background: rgba(10,25,40,0.85);
-    padding: 16px;
-    border-radius: 10px;
-}
-
-/* ================= NARRATIVE MODE ================= */
-body.narrative-mode .sidebar {
-    display: none;
-}
-
-body.narrative-mode .main-area {
-    width: 100vw;
-}
-
-/* ================= MODAL ================= */
-.modal {
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background: rgba(0,0,0,0.75);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-}
-
-.modal-content {
-    background:#0c1f33;
-    padding:20px;
-    border-radius:10px;
-    width:420px;
-}
-
-.modal-close {
-    float:right;
-    cursor:pointer;
-}
-
-.start-btn {
-    margin-top:10px;
-    padding:10px;
-    width:100%;
-    border:none;
-    border-radius:8px;
-    background:#ff7a2f;
-    color:white;
-    cursor:pointer;
-}
-
-/* ================= FIX: MODAL BUG ================= */
-.hidden {
-    display: none !important;
-}
-
-.modal.hidden {
-    display: none !important;
-}
-
-.floating-detail.hidden {
-    display: none !important;
-}
-
-/* ================= LEAFLET FIX ================= */
+/* Move zoom buttons up */
 .leaflet-control-zoom {
-    margin-bottom: 70px !important;
+  margin-bottom: 70px !important;
+}
+
+/* ================= Floating Detail ================= */
+/* Right-side detail panel */
+.floating-detail {
+  position: absolute;
+  top: 78px;
+  right: 22px;
+  width: 430px;
+  max-height: calc(100vh - 105px);
+  overflow-y: auto;
+  padding: 18px;
+  background: rgba(255,250,240,0.98);
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+  z-index: 900;
+}
+
+/* Close buttons */
+.detail-close,
+.modal-close {
+  float: right;
+  background: transparent;
+  font-size: 22px;
+}
+
+/* Park image */
+.detail-img {
+  width: 100%;
+  max-height: 185px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 8px 0;
+}
+
+/* Metadata line */
+.detail-meta {
+  font-size: 12px;
+  color: #5c6b73;
+}
+
+/* Highlighted value block */
+.selected-value {
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(44,110,145,0.10);
+  border-left: 4px solid #2c6e91;
+}
+
+/* Warning (missing data) */
+.data-warning {
+  background: #fff1d6;
+  border-left: 4px solid #bc6c25;
+}
+
+/* Debug info */
+.debug-note {
+  font-size: 12px;
+  color: #586575;
+}
+
+/* ================= Risk Cards ================= */
+/* Small metric cards */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+}
+
+.risk-card {
+  padding: 10px;
+  border-radius: 12px;
+  background: #eef6f7;
+  border-left: 4px solid #2c6e91;
+}
+
+/* ================= Glyphs ================= */
+/* Diamond markers on map */
+.rank-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+  opacity: 0.92;
+}
+
+/* Rank number inside glyph */
+.rank-glyph span {
+  transform: rotate(-45deg);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* Selected glyph highlight */
+.rank-glyph.selected {
+  border: 3px solid #9d0208;
+}
+
+/* ================= Detail Mode ================= */
+/* Layout changes when clicking a park */
+body.detail-mode #homePage {
+  display: grid !important;
+  grid-template-columns: minmax(520px, 0.58fr) minmax(680px, 0.42fr);
+  grid-template-rows: 68vh auto;
+}
+
+/* Map shrinks */
+body.detail-mode #map {
+  height: 68vh !important;
+}
+
+/* Detail panel becomes side panel */
+body.detail-mode .floating-detail {
+  position: relative !important;
+  width: 100% !important;
+}
+
+/* ================= Comparison Panel ================= */
+/* Multi-park comparison dashboard */
+.comparison-panel {
+  padding: 26px;
+  background: #fffaf0;
+}
+
+/* Selected parks list */
+.compare-chip {
+  display: inline-flex;
+  padding: 7px 10px;
+  background: #e8f2ec;
+}
+
+/* Charts layout */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+/* ================= Responsive ================= */
+/* Tablet + mobile adjustments */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  #map {
+    height: 60vh;
+  }
 }
