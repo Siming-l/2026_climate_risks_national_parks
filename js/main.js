@@ -1,19 +1,7 @@
 const apiKey = "bWAAEqyZ3eUDlvKietZDTGgX0NAg9fBoeUPItvkV";
 
 
-// =========================================================
-// main.js — National Park Climate Explorer
-// Full annotated version
-// =========================================================
-// This file controls the map, data loading, park details,
-// rankings, and multi-park comparison dashboard.
-// Keep all data files inside the /data folder.
-// =========================================================
 
-// -------------------------------
-// NPS API + global state
-// -------------------------------
-// Replace this with your own NPS API key.
 
 // Main map controls
 let currentHazard = "overall";
