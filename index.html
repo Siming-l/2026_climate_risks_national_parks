@@ -1,233 +1,463 @@
+# Annotated HTML Version
+
+```html
 <!DOCTYPE html>
+<!-- Main HTML document for the National Park Climate Explorer -->
 <html lang="en">
+
 <head>
+
+  <!-- Character encoding -->
   <meta charset="utf-8">
 
-  <!-- Page title (browser tab) -->
+  <!-- Browser tab title -->
   <title>Climate Risks Across U.S. National Parks</title>
 
-  <!-- Mobile scaling -->
+  <!-- Responsive scaling for mobile/tablet -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Leaflet map style -->
+  <!-- Leaflet core CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
-  <!-- Your custom styles -->
+  <!-- Marker cluster plugin CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
+
+  <!-- Main project CSS -->
   <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body>
+<!-- Start page with modal open -->
+<body class="modal-open">
 
-<!-- ================= Intro Modal ================= -->
-<!-- First screen user sees -->
+<!-- ================= INTRO MODAL ================= -->
+
+<!-- Intro popup shown when the website first opens -->
 <div id="introModal" class="modal">
-  <div class="modal-content">
-    <!-- Close button -->
-    <button class="modal-close" onclick="closeModal('introModal')">×</button>
 
+  <div class="modal-content">
+
+    <!-- Close button -->
+    <button
+      class="modal-close"
+      type="button"
+      onmousedown="document.getElementById('introModal').remove(); document.body.classList.remove('modal-open');"
+    >
+      ×
+    </button>
+
+    <!-- Main modal title -->
     <h2>Climate Risks Across U.S. National Parks</h2>
 
-    <!-- Short explanation -->
+    <!-- Short project description -->
     <p>
-      Explore monthly climate parameters, event risks, park boundaries, ranking charts,
+      Explore monthly climate parameters, park boundaries, ranking charts,
       NPS media, activities, weather information, and park-level climate stories.
     </p>
 
-    <!-- Entry button -->
-    <button class="start-btn" onclick="closeModal('introModal')">
+    <!-- Main entry button -->
+    <button
+      id="startExploring"
+      class="start-btn"
+      type="button"
+      onmousedown="document.getElementById('introModal').remove(); document.body.classList.remove('modal-open');"
+    >
       Start Exploring
     </button>
+
   </div>
 </div>
 
-<!-- ================= Main App ================= -->
+<!-- ================= MAIN APP ================= -->
+
+<!-- Main app container: sidebar + main content -->
 <div class="app-container">
 
-  <!-- ================= Sidebar ================= -->
+  <!-- ================= SIDEBAR ================= -->
+
   <!-- Left control panel -->
   <aside class="sidebar">
 
-    <!-- Title -->
+    <!-- Sidebar title -->
     <div class="title-block">
       <h1>National Park Climate Explorer</h1>
       <p>Monthly climate + risk data · 1985–2026</p>
     </div>
 
-    <!-- Search -->
+    <!-- ================= SEARCH ================= -->
+
+    <!-- Park search box -->
     <div class="panel-section">
       <label>Search Park</label>
       <input id="searchBox" type="text" placeholder="Search Acadia, Yosemite...">
     </div>
 
-    <!-- Indicator selection -->
+    <!-- ================= MAP INDICATOR ================= -->
+
+    <!-- Dropdown controlling which variable is mapped -->
     <div class="panel-section">
       <label>Map Indicator</label>
+
       <select id="hazardSelect">
-        <!-- Climate -->
-        <option value="overall">Overall Climate Risk</option>
+        <option value="multi_risk">Overall Climate Risk</option>
+        <option value="heat_risk">Heat Risk</option>
+        <option value="flood_risk">Flood / Wetness Risk</option>
+        <option value="drought_risk">Drought Risk</option>
+        <option value="cold_risk">Cold Risk</option>
         <option value="temp">Mean Temperature</option>
         <option value="tmax">Maximum Temperature</option>
         <option value="tmin">Minimum Temperature</option>
         <option value="precip">Precipitation</option>
-        <option value="pdsi">Drought Index / PDSI</option>
-
-        <!-- Event risks -->
-        <option value="flood">Flood Event Risk</option>
-        <option value="wildfire">Wildfire Event Risk</option>
-        <option value="droughtEvent">Drought Event Risk</option>
-        <option value="cold">Cold Event Risk</option>
+        <option value="pdsi">PDSI</option>
       </select>
     </div>
 
-    <!-- Year slider -->
+    <!-- ================= YEAR SLIDER ================= -->
+
+    <!-- Time slider for switching years -->
     <div class="panel-section">
-      <label>Year: <span id="yearLabel">1985</span></label>
-      <input id="yearSlider" type="range" min="1985" max="2026" value="1985">
+
+      <label>
+        Year: <span id="yearLabel">2025</span>
+      </label>
+
+      <input id="yearSlider" type="range" min="1985" max="2026" value="2025">
+
+      <!-- Slider labels -->
       <div class="slider-labels">
         <span>1985</span>
         <span>2026</span>
       </div>
+
     </div>
 
-    <!-- Risk filter -->
-    <div class="panel-section">
-      <label>Minimum Risk / Value: <span id="riskLabel">0</span></label>
-      <input id="riskFilter" type="range" min="0" max="100" step="5" value="0">
-    </div>
+    <!-- ================= QUICK ZOOM ================= -->
 
-    <!-- Quick zoom -->
+    <!-- Predefined zoom buttons -->
     <div class="panel-section">
+
       <label>Quick Zoom</label>
+
       <div class="zoom-buttons">
-        <button onclick="zoomToRegion('all')">All Parks</button>
-        <button onclick="zoomToRegion('mainland')">Mainland U.S.</button>
-        <button onclick="zoomToRegion('alaska')">Alaska</button>
-        <button onclick="zoomToRegion('hawaii')">Hawaii</button>
-        <button onclick="zoomToRegion('virgin')">Virgin Islands</button>
+
+        <button type="button" onclick="zoomToRegion('all')">
+          All Parks
+        </button>
+
+        <button type="button" onclick="zoomToRegion('mainland')">
+          Mainland U.S.
+        </button>
+
+        <button type="button" onclick="zoomToRegion('alaska')">
+          Alaska
+        </button>
+
+        <button type="button" onclick="zoomToRegion('hawaii')">
+          Hawaii
+        </button>
+
+        <button type="button" onclick="zoomToRegion('virgin')">
+          Virgin Islands
+        </button>
+
       </div>
     </div>
 
-    <!-- Legend -->
+    <!-- ================= LEGEND ================= -->
+
+    <!-- Dynamic legend -->
     <div class="panel-section">
+
       <label>Legend</label>
 
-      <!-- Dynamic title -->
+      <!-- Legend title changes based on selected variable -->
       <div id="legendTitle" class="legend-title">
         Overall Climate Risk
       </div>
 
-      <!-- Gradient bar -->
+      <!-- Color gradient bar -->
       <div id="legendGradient" class="legend-gradient"></div>
 
-      <!-- Labels -->
+      <!-- Legend min/max labels -->
       <div class="legend-labels">
         <span>Low</span>
         <span>High</span>
       </div>
 
-      <!-- Note -->
+      <!-- Small explanatory note -->
       <div class="legend-note">
-        Dashed polygons = National Park boundary area.
+        Diamond glyphs show park rank. Larger and darker symbols indicate higher relative values.
+        Clusters summarize parks at small map scales. Dashed polygons show National Park boundary areas.
       </div>
+
     </div>
 
-    <!-- Selected park summary -->
+    <!-- ================= SELECTED PARK ================= -->
+
+    <!-- Small summary of currently selected park -->
     <div class="panel-section">
+
       <label>Selected Park</label>
+
       <div id="selectedParkPanel">
-        Click a park boundary or ranking bar.
+        Click a park boundary, glyph, or ranking bar.
       </div>
+
     </div>
 
   </aside>
 
-  <!-- ================= Main Area ================= -->
+  <!-- ================= MAIN AREA ================= -->
+
   <main class="main-area">
 
-    <!-- Top navigation -->
+    <!-- ================= TOP NAV ================= -->
+
+    <!-- Navigation bar -->
     <nav class="top-nav">
+
+      <!-- Project title -->
       <div class="nav-title">
-        <strong>Climate Risks Across U.S. National Parks</strong>
+
+        <strong>
+          Climate Risks Across U.S. National Parks
+        </strong>
+
         <span>
-          Climate parameters · NOAA events · NPS API · park boundaries
+          Climate parameters · NOAA climate data · NPS API · park boundaries
         </span>
+
       </div>
 
-      <!-- Page switch -->
+      <!-- Page switching buttons -->
       <div class="nav-links">
-        <button onclick="showPage('homePage')">Explorer</button>
-        <button onclick="showPage('storyPage')">Story</button>
-        <button onclick="showPage('dataPage')">Data</button>
+
+        <button type="button" onclick="showPage('homePage')">
+          Explorer
+        </button>
+
+        <button type="button" onclick="showPage('storyPage')">
+          Story
+        </button>
+
+        <button type="button" onclick="showPage('dataPage')">
+          Data
+        </button>
+
       </div>
     </nav>
 
-    <!-- ================= Explorer Page ================= -->
+    <!-- ================= EXPLORER PAGE ================= -->
+
+    <!-- Main interactive dashboard page -->
     <section id="homePage" class="page active-page">
 
-      <!-- Map container -->
+      <!-- ================= MAP ================= -->
+
+      <!-- Leaflet map container -->
       <div id="map"></div>
 
-      <!-- Right detail panel -->
+      <!-- ================= DETAIL PANEL ================= -->
+
+      <!-- Floating park detail panel -->
       <div id="floatingDetail" class="floating-detail hidden">
-        <button class="detail-close" onclick="closeFloatingDetail()">×</button>
+
+        <!-- Close button -->
+        <button class="detail-close" type="button" onclick="closeFloatingDetail()">
+          ×
+        </button>
+
+        <!-- Dynamic detail content inserted by JS -->
         <div id="floatingDetailContent"></div>
+
       </div>
 
-      <!-- Ranking chart -->
+      <!-- ================= RANKING RESIZE BAR ================= -->
+
+      <!-- Resize handle for ranking chart panel -->
+      <div id="rankingResizeBar" class="resize-bar">
+        Drag to resize ranking panel
+      </div>
+
+      <!-- ================= RANKING PANEL ================= -->
+
+      <!-- National park ranking chart -->
       <section class="chart-panel">
+
+        <!-- Chart title and description -->
         <div class="chart-header">
+
           <div>
-            <h3>Risk Ranking Across National Parks</h3>
+
+            <h3>
+              Risk Ranking Across National Parks
+            </h3>
+
             <p>
-              Ranking uses your monthly climate and event-risk CSVs.
-              Click a bar to inspect the park.
+              Bars rank parks by the selected indicator. Diamond glyph numbers on the map
+              match this ranking. Click a bar to inspect the park.
             </p>
+
           </div>
         </div>
 
-        <!-- D3 chart -->
+        <!-- D3 ranking chart -->
         <svg id="rankingChart"></svg>
+
       </section>
 
+      <!-- ================= COMPARISON RESIZE BAR ================= -->
+
+      <!-- Resize handle for comparison panel -->
+      <div id="comparisonResizeBar" class="resize-bar">
+        Drag to resize comparison panel
+      </div>
+
     </section>
 
-    <!-- ================= Story Page ================= -->
+    <!-- ================= STORY PAGE ================= -->
+
+    <!-- Project explanation page -->
     <section id="storyPage" class="page text-page">
+
       <div class="hero-section">
-        <h1>Climate Stories in Protected Landscapes</h1>
+
+        <h1>
+          Project Story: Visualizing Climate Risks Across U.S. National Parks
+        </h1>
+
         <p>
-          This dashboard links park boundaries with monthly climate parameters,
-          climate-event risk, NPS descriptions, media, activities,
-          and visitor information.
+          This project supports environmental planning and climate-risk communication by
+          helping users identify high-risk parks, compare climate hazards, and understand
+          how risks vary across space and time.
         </p>
+
       </div>
+
     </section>
 
-    <!-- ================= Data Page ================= -->
+    <!-- ================= DATA PAGE ================= -->
+
+    <!-- Data and methods explanation page -->
     <section id="dataPage" class="page text-page">
+
       <div class="hero-section">
+
         <h1>Data + Methods</h1>
+
         <p>
-          Climate data are loaded from your two monthly CSV files.
-          Park information comes from the NPS API.
-          Boundaries are loaded from
-          <code>data/nps_boundaries.geojson</code>.
+          This project organizes monthly climate records into a park-year-month structure,
+          derives climate-risk indicators, and visualizes them through linked map, ranking,
+          detail, and comparison views.
         </p>
+
       </div>
+
     </section>
 
   </main>
 </div>
 
-<!-- ================= Scripts ================= -->
-<!-- D3 for charts -->
+<!-- ================= JAVASCRIPT ================= -->
+
+<!-- D3.js library -->
 <script src="lib/d3.v7.min.js"></script>
 
-<!-- Leaflet for map -->
+<!-- Leaflet core JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<!-- Your main logic -->
+<!-- Marker cluster plugin -->
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+<!-- Main project JS -->
 <script src="js/main.js"></script>
+
+<!-- ================= PANEL RESIZE SCRIPT ================= -->
+
+<script>
+
+  // Border-drag resizing for the bottom dashboard panels
+  window.addEventListener("load", function () {
+
+    // Resize bars
+    const rankingBar = document.getElementById("rankingResizeBar");
+    const comparisonBar = document.getElementById("comparisonResizeBar");
+
+    // Ranking panel reference
+    const rankingPanel = document.querySelector(".chart-panel");
+
+    // Active resizing variables
+    let activePanel = null;
+    let startY = 0;
+    let startHeight = 0;
+
+    // Start dragging
+    function startResize(e, panel) {
+
+      if (!panel) return;
+
+      activePanel = panel;
+      startY = e.clientY;
+      startHeight = panel.getBoundingClientRect().height;
+
+      document.body.classList.add("is-resizing");
+
+      e.preventDefault();
+    }
+
+    // Resize while dragging
+    function doResize(e) {
+
+      if (!activePanel) return;
+
+      const dy = e.clientY - startY;
+
+      // Prevent panels from becoming too small
+      const newHeight = Math.max(500, startHeight + dy);
+
+      activePanel.style.height = newHeight + "px";
+      activePanel.style.minHeight = newHeight + "px";
+
+      // Refresh Leaflet map after resizing
+      if (typeof map !== "undefined") {
+        setTimeout(() => map.invalidateSize(), 50);
+      }
+    }
+
+    // Stop dragging
+    function stopResize() {
+      activePanel = null;
+      document.body.classList.remove("is-resizing");
+    }
+
+    // Ranking panel resize
+    if (rankingBar) {
+
+      rankingBar.addEventListener("mousedown", e => {
+        startResize(e, rankingPanel);
+      });
+    }
+
+    // Comparison panel resize
+    if (comparisonBar) {
+
+      comparisonBar.addEventListener("mousedown", e => {
+
+        const comparisonPanel = document.getElementById("comparisonPanel");
+
+        startResize(e, comparisonPanel);
+      });
+    }
+
+    // Global mouse listeners
+    document.addEventListener("mousemove", doResize);
+    document.addEventListener("mouseup", stopResize);
+
+  });
+
+</script>
 
 </body>
 </html>
+```

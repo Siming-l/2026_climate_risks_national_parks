@@ -1,37 +1,72 @@
-/* ================= Global ================= */
-/* Basic page reset */
+
+/* Basic page setup: remove browser margin, set full height, default font, background, and text color. */
 html,
 body {
   margin: 0;
   height: 100%;
   font-family: "Segoe UI", Arial, sans-serif;
-  background: #f3efe6;
+  background: #fffaf0;
   color: #17212b;
+  overflow: hidden;
 }
 
+/* Make width and height calculations more predictable for all elements. */
 * {
   box-sizing: border-box;
 }
 
+/* Make form controls use the same font as the rest of the website. */
 button,
 input,
 select {
   font-family: inherit;
 }
 
+/* Default button style used across the interface. */
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  background: #31572c;
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Slightly darker button color when the user hovers. */
+button:hover {
+  background: #24441f;
+}
+
+/* Default style for input boxes and dropdown menus. */
+input,
+select {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid #c9d1d9;
+  background: #f7fbff;
+  color: #17212b;
+}
+
+/* Utility class for hiding elements completely. */
 .hidden {
   display: none !important;
 }
 
-/* ================= App Shell ================= */
-/* Full app: sidebar + main dashboard */
+
+
+
+
+/* ================= APP ================= */
+/* Main app frame: sidebar on the left, main content on the right. */
 .app-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Left control sidebar */
+/* Left control sidebar for filters, legend, zoom buttons, and map controls. */
 .sidebar {
   width: 320px;
   flex: 0 0 320px;
@@ -42,58 +77,55 @@ select {
   z-index: 20;
 }
 
-/* Main right area */
+/* Right side main content area, including top nav, map, ranking, and comparison panels. */
 .main-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  overflow: hidden;
   background: #fffaf0;
 }
 
-/* ================= Sidebar ================= */
-/* App title */
+
+
+
+
+/* ================= SIDEBAR ================= */
+/* Sidebar title style. */
 .title-block h1 {
   margin: 0;
   font-size: 22px;
   line-height: 1.25;
 }
 
+/* Sidebar subtitle / description text. */
 .title-block p {
   margin: 8px 0 0;
   font-size: 12px;
   color: #aac4d8;
 }
 
-/* Sidebar card blocks */
+/* Each control group inside the sidebar. */
 .panel-section {
   margin-top: 15px;
   padding: 12px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
+/* Labels above dropdowns, sliders, and control groups. */
 .panel-section label {
   display: block;
   margin-bottom: 6px;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 900;
   color: #b8d8ec;
   text-transform: uppercase;
 }
 
-/* Inputs in sidebar */
-input,
-select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: #f7fbff;
-  color: #17212b;
-}
-
+/* Small labels below sliders and legends. */
 .slider-labels,
 .legend-labels {
   display: flex;
@@ -102,260 +134,248 @@ select {
   color: #b8d8ec;
 }
 
+/* Container for region zoom buttons. */
 .zoom-buttons {
   display: grid;
-  gap: 6px;
+  gap: 7px;
 }
 
-/* Buttons */
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 8px 12px;
-  cursor: pointer;
+/* Blue style for zoom buttons. */
+.zoom-buttons button {
   background: #2c6e91;
-  color: white;
-  font-weight: 700;
 }
 
-button:hover {
+/* Hover color for zoom buttons. */
+.zoom-buttons button:hover {
   background: #1f5775;
 }
 
-/* ================= Top Navigation ================= */
-/* Header above the dashboard */
+/* REMOVE MIN RISK PANEL */
+
+/* Hide the old minimum-risk filter because this version uses the main hazard selector instead. */
+#riskFilter,
+#riskLabel {
+  display: none !important;
+}
+
+/* Hide the whole sidebar section containing the removed risk filter. */
+.panel-section:has(#riskFilter) {
+  display: none !important;
+}
+
+
+
+
+
+
+/* ================= TOP NAV ================= */
+/* Top navigation bar across the main content area. */
 .top-nav {
-  height: 60px;
-  min-height: 60px;
-  padding: 10px 18px;
+  min-height: 72px;
+  padding: 12px 22px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background: #fffaf0;
+  justify-content: space-between;
+  background: linear-gradient(90deg,#fffaf0 0%,#f6efe2 100%);
   border-bottom: 1px solid #d6cdbf;
-  z-index: 500;
+  z-index: 100;
 }
 
+/* Title block layout in the navigation bar. */
+.nav-title {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  gap: 4px 16px;
+  align-items: center;
+}
+
+/* Main website title. */
 .nav-title strong {
-  display: block;
-  font-size: 16px;
+  font-size: 21px;
+  font-weight: 900;
+  color: #102235;
 }
 
+/* Small subtitle under the title. */
 .nav-title span {
-  font-size: 12px;
-  color: #586575;
+  font-size: 13px;
+  color: #607080;
 }
 
+/* Navigation page buttons on the right. */
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+/* Individual nav buttons. */
 .nav-links button {
-  margin-left: 6px;
-  background: #31572c;
+  border-radius: 12px;
+  padding: 10px 15px;
 }
 
-.nav-links button:hover {
-  background: #24441f;
+/* Dark mode button inside the title area. */
+.dark-mode-toggle,
+#darkModeToggle {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#1b4332,#31572c);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
 }
 
-/* ================= Pages ================= */
-/* Page switching */
+/* ================= PAGE ================= */
+/* Pages are hidden by default. */
 .page {
   display: none;
-  flex: 1;
 }
 
+/* Only the active page is visible. */
 .active-page {
   display: block;
 }
 
-/* ================= Stable Explorer Layout ================= */
-/* Main dashboard grid */
+/* ================= HOME GRID ================= */
+/* Main Explorer page layout when no park detail panel is open. */
 #homePage {
   display: grid;
-  grid-template-columns: minmax(0, 58%) minmax(460px, 42%);
-  grid-template-rows: 70vh auto;
+  grid-template-columns: 100%;
+  grid-template-rows:
+    minmax(72vh, auto)
+    minmax(1200px, auto)
+    minmax(900px, auto);
+  grid-template-areas:
+    "map"
+    "ranking"
+    "comparison";
+  overflow-y: auto;
+  height: calc(100vh - 72px);
+}
+
+/* Explorer layout after a park is selected: map and detail panel sit side by side. */
+body.detail-mode #homePage {
+  grid-template-columns:
+    minmax(0,58%)
+    minmax(460px,42%);
+  grid-template-rows:
+    minmax(72vh, auto)
+    minmax(1200px, auto);
   grid-template-areas:
     "map detail"
     "ranking comparison";
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  background: #fffaf0;
 }
 
-/* Map panel */
+
+
+
+
+/* ================= MAP ================= */
+/* Main Leaflet map container. */
 #map {
   grid-area: map;
   width: 100%;
-  height: 70vh;
-  min-height: 540px;
-  background: #e8e1d2;
-  border-right: 1px solid #d8ccb8;
+  min-height: 600px;
+  height: 72vh;
   border-bottom: 1px solid #d8ccb8;
+  border-right: 1px solid #d8ccb8;
+  z-index: 1;
 }
 
-/* Right detail panel */
+
+
+
+
+
+
+/* ================= DETAIL ================= */
+/* Right-side detail panel shown after clicking a park. */
 .floating-detail {
   grid-area: detail;
-  position: relative !important;
-  top: auto !important;
-  right: auto !important;
-  left: auto !important;
-  width: 100%;
-  height: 70vh;
-  min-height: 540px;
-  max-height: 70vh;
-  overflow-y: auto;
+  overflow: auto;
   padding: 24px;
   background: #fffaf0;
-  color: #17212b;
   border-left: 1px solid #d8ccb8;
   border-bottom: 1px solid #d8ccb8;
-  border-radius: 0;
-  box-shadow: none;
-  z-index: 20;
+  min-height: 700px;
 }
 
-/* When hidden, keep normal behavior */
-.floating-detail.hidden {
+/* Hide the detail panel when no park is selected. */
+body:not(.detail-mode) .floating-detail {
   display: none !important;
 }
 
-/* Ranking panel */
-.chart-panel {
-  grid-area: ranking;
-  padding: 28px;
-  min-height: 820px;
-  background: #fffaf0;
-  border-right: 1px solid #d8ccb8;
-}
-
-/* Comparison panel created by JS */
-#comparisonPanel {
-  grid-area: comparison;
-  padding: 28px;
-  min-height: 820px;
-  background: #fffaf0;
-  border-left: 1px solid #d8ccb8;
-}
-
-/* If comparison panel has not loaded yet */
-.comparison-panel {
-  padding: 28px;
-  background: #fffaf0;
-}
-
-/* ================= Legend ================= */
-/* Color ramp in sidebar */
-.legend-gradient {
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(to right, #ffffcc, #fd8d3c, #800026);
-}
-
-.legend-title {
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.legend-note {
-  margin-top: 8px;
-  font-size: 11px;
-  color: #cfe6f5;
-}
-
-/* ================= Leaflet Controls ================= */
-/* Map layer control */
-.leaflet-control-layers {
-  border-radius: 12px !important;
-  background: rgba(255, 250, 240, 0.96) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
-  border: 1px solid #d8ccb8 !important;
-  color: #17212b !important;
-}
-
-.leaflet-control-layers label {
-  font-size: 12px;
-}
-
-.leaflet-control-zoom {
-  margin-bottom: 70px !important;
-}
-
-/* ================= Detail Panel ================= */
-/* Close button */
+/* Close buttons for detail panel and modal. */
 .detail-close,
 .modal-close {
   float: right;
-  background: transparent;
-  color: #17212b;
-  font-size: 22px;
-  padding: 0;
+  background: #31572c;
+  color: #fff;
+  font-size: 18px;
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
+/* Hover style for close buttons. */
 .detail-close:hover,
 .modal-close:hover {
-  background: transparent;
-  color: #9d0208;
+  background: #24441f;
+  color: #fff;
 }
 
-/* Park image */
+/* Park image inside the detail panel. */
 .detail-img {
   width: 100%;
-  max-height: 210px;
+  max-height: 240px;
   object-fit: cover;
   border-radius: 14px;
-  margin: 10px 0 16px;
 }
 
+/* Small metadata under park name. */
 .detail-meta {
-  font-size: 12px;
   color: #5c6b73;
+  font-size: 12px;
 }
 
-/* Main selected value */
+/* Highlight box showing selected variable value and rank. */
 .selected-value {
   margin: 12px 0;
-  padding: 10px;
-  background: rgba(44, 110, 145, 0.10);
+  padding: 12px;
+  background: rgba(44,110,145,0.10);
   border-left: 4px solid #2c6e91;
   border-radius: 10px;
 }
 
-/* Missing data note */
-.data-warning {
-  margin: 12px 0;
-  padding: 10px;
-  background: #fff1d6;
-  border-left: 4px solid #bc6c25;
-  border-radius: 10px;
-  font-size: 13px;
-}
-
-.debug-note {
-  font-size: 12px;
-  color: #586575;
-}
-
-/* Detail buttons */
+/* Button row inside the detail panel. */
 .detail-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3,1fr);
   gap: 8px;
-  margin: 12px 0 14px;
+  margin: 12px 0;
 }
 
+/* Make the Add to Comparison button stand out. */
 .detail-actions button:first-child {
   background: #bc6c25;
-  font-weight: 900;
 }
 
-/* ================= Risk Cards ================= */
-/* Small values inside detail panel */
+
+
+
+
+/* ================= RISK CARDS ================= */
+/* Grid for annual climate and risk summary cards. */
 .risk-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 9px;
   margin: 12px 0;
 }
 
+/* Individual metric card in the detail panel. */
 .risk-card {
   padding: 10px;
   border-radius: 12px;
@@ -363,62 +383,37 @@ button:hover {
   border-left: 4px solid #2c6e91;
 }
 
+/* Small metric name inside each card. */
 .risk-card span {
-  display: block;
   font-size: 11px;
   color: #586575;
 }
 
+/* Main metric value inside each card. */
 .risk-card strong {
   display: block;
-  margin-top: 2px;
   font-size: 20px;
+  margin-top: 2px;
 }
 
-/* ================= NPS Media + Tags ================= */
-/* Activities and topics */
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 8px 0;
+
+
+
+
+
+/* ================= CHART PANEL ================= */
+/* Ranking chart panel under the map. */
+.chart-panel {
+  grid-area: ranking;
+  padding: 28px;
+  min-height: 1200px !important;
+  height: auto !important;
+  overflow: auto;
+  background: #fffaf0;
+  border-right: 1px solid #d8ccb8;
 }
 
-.tag {
-  padding: 4px 7px;
-  border-radius: 999px;
-  background: #dbead5;
-  color: #24411f;
-  font-size: 11px;
-}
-
-.media-link {
-  display: block;
-  margin: 5px 0;
-  color: #1f5f8b;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.video-box iframe {
-  width: 100%;
-  height: 160px;
-  border: 0;
-  border-radius: 12px;
-  background: #111;
-}
-
-/* ================= Charts ================= */
-/* Detail mini charts */
-.mini-chart {
-  width: 100%;
-  height: 190px;
-  margin: 6px 0 16px;
-  background: #f5f1e8;
-  border-radius: 12px;
-  border: 1px solid #ddd1bd;
-}
-
+/* Header row above ranking chart. */
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -427,427 +422,556 @@ button:hover {
   margin-bottom: 14px;
 }
 
+/* Ranking panel title. */
 .chart-header h3 {
   margin: 0;
+  font-size: 20px;
 }
 
+/* Explanation text below ranking title. */
 .chart-header p {
   color: #586575;
 }
 
-/* Main ranking chart */
+/* SVG container for ranking chart. */
 #rankingChart {
   width: 100%;
-  height: 620px;
+  min-height: 1200px;
+  height: auto;
+  display: block;
+  overflow: visible;
 }
 
+/* Vertical alignment for text inside SVG ranking chart. */
+.chart-rank,
 .chart-label,
 .chart-value {
+  dominant-baseline: middle;
+}
+
+/* Park name labels in the ranking chart. */
+.chart-label {
   fill: #17212b;
-  font-size: 12px;
 }
 
-/* ================= Ranking Enhancements ================= */
-/* Ranking dropdown */
+/* Dropdown control for selecting ranking variable. */
 .ranking-control {
-  min-width: 240px;
-  max-width: 320px;
-  padding: 10px 12px;
+  min-width: 280px;
+  padding: 12px;
   background: #fffdf7;
   border: 1px solid #ddd1bd;
   border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
-.ranking-control label {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 11px;
-  font-weight: 900;
-  text-transform: uppercase;
-  color: #31572c;
-}
-
-.ranking-control select {
-  width: 100%;
-  background: #f7fbff;
-}
-
-/* Summary below ranking */
-.ranking-summary-panel {
-  margin-top: 22px;
-}
-
-.ranking-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.ranking-stat {
-  padding: 13px;
-  background: #eef6f7;
-  border-left: 4px solid #31572c;
-  border-radius: 14px;
-}
-
-.ranking-stat span {
-  display: block;
-  font-size: 11px;
-  color: #586575;
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
-.ranking-stat strong {
-  display: block;
-  margin-top: 5px;
-  font-size: 15px;
-  color: #17212b;
-}
-
-.ranking-extra-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 16px;
-}
-
-.ranking-extra-card {
-  padding: 16px;
-  background: #fffdf7;
-  border: 1px solid #ddd1bd;
-  border-radius: 16px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
-}
-
-.ranking-extra-card h4 {
-  margin: 0 0 10px;
-}
-
-#rankingDistributionChart {
-  width: 100%;
-  height: 180px;
-  display: block;
-}
-
-.ranking-top-list {
-  display: grid;
-  gap: 8px;
-}
-
-.ranking-top-list button {
-  display: grid;
-  grid-template-columns: 42px 1fr 54px;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-  padding: 9px 10px;
-  background: #f5f1e8;
-  color: #17212b;
-  border: 1px solid #ddd1bd;
-  border-radius: 12px;
-}
-
-.ranking-top-list span {
-  color: #31572c;
-  font-weight: 900;
-}
-
-.ranking-top-list b {
+/* Small explanation under ranking dropdown. */
+.cluster-explain {
+  margin-top: 10px;
   font-size: 12px;
-}
-
-.ranking-top-list em {
-  text-align: right;
-  font-style: normal;
-  font-weight: 900;
-  color: #bc6c25;
-}
-
-/* ================= Ranked Glyphs ================= */
-/* Diamond symbols on the map */
-.rank-glyph-wrapper {
-  background: transparent;
-  border: none;
-}
-
-.rank-glyph {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #ffffff;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.35);
-  transform: rotate(45deg);
-  opacity: 0.92;
-  transition: 0.18s ease;
-}
-
-.rank-glyph span {
-  transform: rotate(-45deg);
-  color: #111;
-  font-size: 10px;
-  font-weight: 900;
-}
-
-.rank-glyph.selected {
-  border: 3px solid #9d0208;
-  box-shadow: 0 0 0 3px #fff, 0 0 18px rgba(157, 2, 8, 0.75);
-}
-
-/* ================= Map Compare Tray ================= */
-/* Small compare box over the map */
-#mapComparePanel {
-  position: absolute;
-  left: 18px;
-  top: 18px;
-  width: 285px;
-  padding: 14px;
-  background: rgba(255, 250, 240, 0.96);
-  border: 1px solid #d8ccb8;
-  border-radius: 16px;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.20);
-  z-index: 850;
-  display: none;
-  color: #17212b;
-}
-
-/* Show tray only when detail mode is active */
-body.detail-mode #mapComparePanel {
-  display: block;
-}
-
-#mapComparePanel h4 {
-  margin: 0 0 6px;
-  font-size: 15px;
-}
-
-#mapComparePanel p {
-  margin: 0 0 10px;
+  line-height: 1.45;
   color: #586575;
-  font-size: 12px;
-  line-height: 1.35;
 }
 
-#mapComparePanel .primary-compare-btn {
-  width: 100%;
-  background: #bc6c25;
-  box-shadow: 0 6px 16px rgba(188, 108, 37, 0.28);
+
+
+
+/* ================= COMPARISON PANEL ================= */
+/* Multi-park comparison dashboard under the ranking chart. */
+#comparisonPanel,
+.comparison-panel {
+  grid-area: comparison;
+  padding: 28px;
+  min-height: 900px !important;
+  height: auto !important;
+  overflow: auto;
+  background: #fffaf0;
+  border-left: 1px solid #d8ccb8;
 }
 
-#mapComparePanel .secondary-map-btn {
-  width: 100%;
-  margin-top: 7px;
-  background: #31572c;
-}
-
-/* ================= Comparison Dashboard ================= */
-/* Right-bottom comparison area */
+/* Comparison dashboard title. */
 .comparison-header h3 {
   margin: 0;
   font-size: 24px;
 }
 
+/* Comparison dashboard explanation text. */
 .comparison-header p {
-  margin: 6px 0 0;
   color: #586575;
-  line-height: 1.5;
 }
 
+/* Container for selected park chips. */
 .compare-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 10px 0 18px;
+  margin: 12px 0 18px;
 }
 
+
+
+
+/* Chip showing one selected park in the comparison dashboard. */
 .compare-chip {
   display: inline-flex;
   gap: 8px;
   align-items: center;
   padding: 7px 10px;
   background: #e8f2ec;
-  border: 1px solid #b7ccb8;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  color: #1b4332;
 }
 
+
+/* Small remove button inside each comparison chip. */
 .compare-chip button {
   background: transparent;
   color: #9d0208;
   padding: 0;
-  border: none;
-  font-size: 14px;
 }
 
+/* Layout for comparison charts. */
 .comparison-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
 }
 
+/* Card container for each comparison chart. */
 .comparison-card {
   background: #fffdf7;
   border: 1px solid #ddd1bd;
   border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  min-height: 420px;
 }
 
-.comparison-card h4 {
-  margin: 0 0 10px;
-  font-size: 16px;
-}
-
+/* SVG size for comparison charts. */
 .comparison-svg {
   width: 100%;
-  height: 360px;
-  display: block;
+  min-height: 400px;
+  height: 400px;
 }
 
-.comparison-note {
-  color: #586575;
-  font-size: 13px;
-  line-height: 1.5;
-  margin: 0;
-}
 
-.radar-axis-label,
-.compare-axis text {
-  fill: #42515c;
-  font-size: 11px;
-}
 
-.compare-axis path,
-.compare-axis line {
-  stroke: rgba(23, 33, 43, 0.25);
-}
 
-/* ================= Text Pages ================= */
-/* Story and data pages */
-.text-page {
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  background: linear-gradient(135deg, #fffaf0, #e7f0e2);
-}
-
-.hero-section {
-  padding: 80px 46px;
-}
-
-.hero-section h1 {
-  font-size: 44px;
-}
-
-.hero-section p {
-  max-width: 760px;
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-/* ================= Intro Modal ================= */
-/* Opening splash screen */
-.modal {
+/* ================= MAP COMPARE ================= */
+/* Floating comparison shortcut panel on top of the map. */
+#mapComparePanel {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  left: 336px;
+  top: 88px;
+  width: 300px;
+  padding: 14px;
+  background: rgba(255,250,240,0.96);
+  border: 1px solid #d8ccb8;
+  border-radius: 16px;
+  z-index: 1000;
+}
+
+/* Hide floating comparison panel until detail mode is active. */
+body:not(.detail-mode) #mapComparePanel {
+  display: none !important;
+}
+
+
+
+
+
+
+/* ================= MINI CHART ================= */
+/* Small SVG charts inside the park detail panel. */
+.mini-chart {
+  width: 100%;
+  height: 220px;
+  background: #f5f1e8;
+  border-radius: 12px;
+  border: 1px solid #ddd1bd;
+}
+
+
+
+
+
+/* ================= GLYPH ================= */
+
+/* Leaflet divIcon wrapper for rank glyphs. */
+.rank-glyph-wrapper {
+  background: transparent;
+}
+
+/* Diamond marker for each park. */
+.rank-glyph {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  transform: rotate(45deg);
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.35),
+    0 4px 12px rgba(0,0,0,0.35);
 }
 
+/* Rotate rank number back so the text stays readable inside the diamond. */
+.rank-glyph span {
+  transform: rotate(-45deg);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* Stronger outline for selected park glyph. */
+.rank-glyph.selected {
+  border: 3px solid #9d0208;
+}
+
+
+
+
+
+
+/* ================= LEGEND ================= */
+
+/* Color ramp bar in the sidebar legend. */
+.legend-gradient {
+  height: 12px;
+  border-radius: 999px;
+}
+
+/* Legend title text. */
+.legend-title {
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+/* Small explanatory note under legend. */
+.legend-note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #cfe6f5;
+}
+
+
+
+
+
+/* ================= TEXT PAGE ================= */
+
+/* Story and Data page background and scroll behavior. */
+.text-page {
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+  background: linear-gradient(135deg,#fffaf0,#e7f0e2);
+  padding: 36px 24px;
+}
+
+/* Main card on Story and Data pages. */
+.text-page-card {
+  max-width: 1100px;
+  min-height: 700px;
+  margin: 0 auto;
+  padding: 36px 42px;
+  background: #fffdf7;
+  border-radius: 22px;
+  overflow: auto;
+}
+
+/* Main page heading. */
+.text-page-card h1 {
+  font-size: 38px;
+  color: #102235;
+}
+
+/* Section headings on text pages. */
+.text-page-card h2 {
+  margin-top: 28px;
+  color: #31572c;
+}
+
+/* Tables in Data page. */
+.text-page-card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+}
+
+/* Table cells and borders. */
+.text-page-card th,
+.text-page-card td {
+  border: 1px solid #ddd1bd;
+  padding: 10px;
+}
+
+/* Table header background. */
+.text-page-card th {
+  background: #e8f2ec;
+}
+
+
+
+
+
+
+/* ================= MODAL ================= */
+
+/* Full-screen overlay for intro modal. */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.65);
+}
+
+/* Modal content box. */
 .modal-content {
-  width: 480px;
-  padding: 24px;
+  width: 520px;
+  max-width: 90vw;
+  padding: 28px;
+  border-radius: 22px;
   background: #fffaf0;
   color: #17212b;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 20px 70px rgba(0,0,0,0.45);
 }
 
+/* Keep modal headings dark and readable. */
+.modal-content h1,
+.modal-content h2,
+.modal-content h3 {
+  color: #17212b;
+}
+
+/* Modal body text. */
+.modal-content p {
+  color: #344252;
+  line-height: 1.55;
+}
+
+/* Start exploring button in modal. */
+#startExploring,
 .start-btn {
   width: 100%;
   margin-top: 12px;
   background: #bc6c25;
+  color: #fff;
 }
 
-/* ================= Responsive ================= */
-/* Medium screens */
+/* Hover color for start button. */
+#startExploring:hover,
+.start-btn:hover {
+  background: #d6813d;
+}
+
+
+
+
+/* ================= RESIZE ================= */
+
+/* Allow major panels to be vertically resized. */
+.chart-panel,
+#comparisonPanel,
+.comparison-panel,
+.floating-detail,
+.text-page-card,
+.comparison-card {
+  resize: vertical !important;
+  overflow: auto !important;
+}
+
+/* Small visual hint showing that panels can be resized. */
+.chart-panel::after,
+#comparisonPanel::after,
+.floating-detail::after,
+.text-page-card::after,
+.comparison-card::after {
+  content: "↕ Drag Up/Down";
+  float: right;
+  color: #31572c;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ================= DARK MODE ================= */
+
+/* Main dark mode background and text color. */
+body.dark-mode {
+  background: #07111f;
+  color: #e6edf5;
+}
+
+/* Dark mode top navigation. */
+body.dark-mode .top-nav {
+  background: linear-gradient(90deg,#07111f,#0f1b2d);
+}
+
+/* Dark mode title color. */
+body.dark-mode .nav-title strong {
+  color: #f1f7ff;
+}
+
+/* Dark mode subtitle color. */
+body.dark-mode .nav-title span {
+  color: #b8c7d9;
+}
+
+/* Dark mode background for main panels. */
+body.dark-mode .main-area,
+body.dark-mode .chart-panel,
+body.dark-mode #comparisonPanel,
+body.dark-mode .floating-detail,
+body.dark-mode .text-page-card,
+body.dark-mode .comparison-card {
+  background: #07111f;
+  color: #e6edf5;
+}
+
+/* Dark mode sidebar background. */
+body.dark-mode .sidebar {
+  background: #06101c;
+}
+
+/* Dark mode card and control panel backgrounds. */
+body.dark-mode .panel-section,
+body.dark-mode .risk-card,
+body.dark-mode .ranking-control {
+  background: #0f1b2d;
+  color: #e6edf5;
+}
+
+/* Dark mode form controls. */
+body.dark-mode input,
+body.dark-mode select {
+  background: #14243a;
+  color: #e6edf5;
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* Dark mode SVG text labels. */
+body.dark-mode .chart-label,
+body.dark-mode .chart-value,
+body.dark-mode .chart-rank {
+  fill: #e6edf5;
+}
+
+/* Dark mode text page headings. */
+body.dark-mode .text-page-card h1,
+body.dark-mode .text-page-card h2 {
+  color: #d8f3dc;
+}
+
+/* Dark mode secondary text. */
+body.dark-mode .detail-meta,
+body.dark-mode .chart-header p,
+body.dark-mode .comparison-header p,
+body.dark-mode .cluster-explain {
+  color: #b8c7d9;
+}
+
+/* DARK MODE MODAL FIX */
+
+/* Keep modal readable even when the rest of the site is in dark mode. */
+body.dark-mode .modal-content {
+  background: #fffaf0 !important;
+  color: #17212b !important;
+  border: 1px solid #e2d6c4;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65);
+}
+
+/* Keep modal headings dark in dark mode. */
+body.dark-mode .modal-content h1,
+body.dark-mode .modal-content h2,
+body.dark-mode .modal-content h3 {
+  color: #17212b !important;
+}
+
+/* Keep modal paragraph text readable in dark mode. */
+body.dark-mode .modal-content p,
+body.dark-mode .modal-content span,
+body.dark-mode .modal-content div {
+  color: #344252 !important;
+}
+
+/* Close button inside dark mode modal. */
+body.dark-mode .modal-content .modal-close {
+  background: #31572c !important;
+  color: #fff !important;
+}
+
+/* Start button inside dark mode modal. */
+body.dark-mode .modal-content #startExploring,
+body.dark-mode .modal-content .start-btn {
+  background: #bc6c25 !important;
+  color: #fff !important;
+}
+
+/* Hover style for start button inside dark mode modal. */
+body.dark-mode .modal-content #startExploring:hover,
+body.dark-mode .modal-content .start-btn:hover {
+  background: #d6813d !important;
+}
+
+/* ================= MOBILE ================= */
+
+/* Tablet and smaller desktop layout. */
 @media (max-width: 1200px) {
-  #homePage {
+
+  /* Stack map, detail, ranking, and comparison panels vertically on smaller screens. */
+  #homePage,
+  body.detail-mode #homePage {
     grid-template-columns: 1fr;
-    grid-template-rows: 60vh auto auto auto;
+    grid-template-rows:
+      minmax(60vh, auto)
+      auto
+      auto
+      auto;
     grid-template-areas:
       "map"
       "detail"
       "ranking"
       "comparison";
-    height: auto;
   }
 
+  /* Make the map slightly shorter on smaller screens. */
   #map {
     height: 60vh;
-    min-height: 440px;
-    border-right: none;
   }
 
+  /* Reduce detail panel height for smaller screens. */
   .floating-detail {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    border-left: none;
-  }
-
-  .chart-panel,
-  #comparisonPanel {
-    border-left: none;
-    border-right: none;
-  }
-
-  .ranking-extra-grid,
-  .ranking-stat-grid {
-    grid-template-columns: 1fr;
+    min-height: 420px;
   }
 }
 
-/* Small screens */
+/* Phone layout. */
 @media (max-width: 900px) {
+
+  /* Stack sidebar and main area vertically. */
   .app-container {
     flex-direction: column;
-    height: auto;
     overflow: auto;
   }
 
+  /* Sidebar becomes full-width on mobile. */
   .sidebar {
     width: 100%;
-    flex: none;
     max-height: 42vh;
   }
 
-  .main-area {
-    min-height: 100vh;
-  }
-
+  /* Top nav stacks vertically on mobile. */
   .top-nav {
-    height: auto;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
   }
 
-  #homePage,
-  .text-page {
-    height: auto;
-  }
-
-  #map {
-    height: 60vh;
-  }
-
+  /* Detail buttons stack vertically on mobile. */
   .detail-actions {
     grid-template-columns: 1fr;
+  }
+
+  /* Give text pages smaller margins and padding on mobile. */
+  .text-page-card {
+    margin: 18px;
+    padding: 24px;
   }
 }
